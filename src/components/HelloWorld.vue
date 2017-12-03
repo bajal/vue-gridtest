@@ -3,24 +3,55 @@
     <b-alert show>{{ msg }}</b-alert>
 
 <b-container class="bv-example-row">
-    <b-row v-for="row in rows" :key="row.name">  
-      
-        <b-col>
-         <input type="text" v-model="row.name">
-        </b-col>
-        
-        <b-col>
-         <input type="text" v-model="row.job">
-        </b-col>
-
-        <b-col>
-          <a @click="removeRow(row)">Remove</a>
-        </b-col>
-    </b-row>
-    
-    <div>
-  <button class="button btn-primary" @click="addRow">Add row</button>
-</div>
+  <b-row>
+    <b-badge show>V4 Server List</b-badge>
+  </b-row>
+  <b-row v-for="row in v4Servers" :key="row.serverAddress">
+    <b-col>
+          <input type="text" v-model="row.serverAddress" size="64">
+    </b-col>
+    <b-col>
+          <input type="text" v-model="row.prefer">
+    </b-col>
+    <b-col>
+      <button class="button btn-primary" @click="addRow('v4')">Add row</button>
+      <button class="button btn-primary" @click="removeRow(row, 'v4')">Delete row</button>
+    </b-col>
+  </b-row>
+  <b-row>
+    <b-badge show>V6 Server List</b-badge>
+  </b-row>
+  <b-row v-for="row in v6Servers" :key="row.serverAddress">
+    <b-col>
+          <input type="text" v-model="row.serverAddress" size="64">
+    </b-col>
+    <b-col>
+          <input type="text" v-model="row.prefer">
+    </b-col>
+    <b-col>
+      <button class="button btn-primary" @click="addRow('v6')">Add row</button>
+      <button class="button btn-primary" @click="removeRow(row, 'v6')">Delete row</button>
+    </b-col>
+  </b-row>
+  <b-row>
+    <b-badge show>Prefix List</b-badge>
+  </b-row>
+  
+  <b-row v-for="row in prefixes" :key="row.nameserverAddress">
+    <b-row>
+    <b-badge show>Prefix Name</b-badge>
+  </b-row>
+    <b-col>
+          <input type="text" v-model="row.serverAddress">
+    </b-col>
+    <b-col>
+          <input type="text" v-model="row.prefer">
+    </b-col>
+    <b-col>
+      <button class="button btn-primary" @click="addRow('prefix')">Add row</button>
+      <button class="button btn-primary" @click="removeRow(row, 'prefix')">Delete row</button>
+    </b-col>
+  </b-row>
 </b-container>
 
 
@@ -35,22 +66,51 @@ export default {
   data () {
     return {
       msg: 'Welcome to SDN-GP',
-      rows: [
-      { name: 'James Bond', job: 'spy'},
-      { name: 'Goldfinger', job: 'villain'}
+      "v4Servers": [
+        {
+          "serverAddress": "123.121.12.123",
+          "prefer": "No"
+        }
       ],
-      counter : 0
+      "v6Servers": [
+        {
+          "serverAddress": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+          "prefer": "Yes"
+        }
+      ],
+      "prefixes": [
+        {
+          "name": "PL_SNMP_V6",
+          "networks": [
+            "Network1"
+          ]
+        }
+      ],
     }
   }, 
   methods : {
 
-    addRow: function(){
-      this.rows.push({name:this.counter + 1,job:''});
+    addRow: function(rowType){
+      //this.rows.push({name:'',job:''})
+      //console.log(rowType)
+      if(rowType === 'v4')
+        this.v4Servers.push({serverAddress:'',prefer:''})
+      else if  (rowType === 'v6')
+        this.v6Servers.push({serverAddress:'',prefer:''})
+      else (rowType === 'prefix')
+        this.prefixes.push({name:'',job:''})
     },
-    removeRow: function(row){
-      var index = this.rows.indexOf(row);
-      console.log("index "+index)
-      this.rows.splice(index, 1);
+    removeRow: function(row, rowType){
+      if(rowType === 'v4') {
+        var index = this.v4Servers.indexOf(row)
+        this.v4Servers.splice(index, 1)
+      } else if(rowType === 'v6') {
+        var index = this.v6Servers.indexOf(row)
+        this.v6Servers.splice(index, 1)
+      } else if(rowType === 'prefix') {
+        var index = this.prefixes.indexOf(row)
+        this.prefixes.splice(index, 1)
+      }
     }
 
   }
