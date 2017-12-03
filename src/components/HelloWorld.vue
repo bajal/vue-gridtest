@@ -1,25 +1,26 @@
 <template>
   <div class="hello">
     <b-alert show>{{ msg }}</b-alert>
-    <!-- <b-container fluid>
-    
-    </b-container> -->
-    <b-container class="bv-example-row">
-    <b-row>
+
+<b-container class="bv-example-row">
+    <b-row v-for="row in rows" :key="row.name">  
       
         <b-col>
-          <label for="input-small">V4Address:</label>
-          <b-form-input v-model="text1"
-                  type="text"
-                  placeholder="Enter your name"></b-form-input>
+         <input type="text" v-model="row.name">
         </b-col>
-        <b-col>2 of 2</b-col>
+        
+        <b-col>
+         <input type="text" v-model="row.job">
+        </b-col>
+
+        <b-col>
+          <a @click="removeRow(row)">Remove</a>
+        </b-col>
     </b-row>
-    <b-row>
-        <b-col>1 of 3</b-col>
-        <b-col>2 of 3</b-col>
-        <b-col>3 of 3</b-col>
-    </b-row>
+    
+    <div>
+  <button class="button btn-primary" @click="addRow">Add row</button>
+</div>
 </b-container>
 
 
@@ -30,10 +31,28 @@
 <script>
 export default {
   name: 'HelloWorld',
+  
   data () {
     return {
-      msg: 'Welcome to SDN-GP'
+      msg: 'Welcome to SDN-GP',
+      rows: [
+      { name: 'James Bond', job: 'spy'},
+      { name: 'Goldfinger', job: 'villain'}
+      ],
+      counter : 0
     }
+  }, 
+  methods : {
+
+    addRow: function(){
+      this.rows.push({name:this.counter + 1,job:''});
+    },
+    removeRow: function(row){
+      var index = this.rows.indexOf(row);
+      console.log("index "+index)
+      this.rows.splice(index, 1);
+    }
+
   }
 }
 </script>
